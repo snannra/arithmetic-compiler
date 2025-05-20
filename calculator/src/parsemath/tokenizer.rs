@@ -11,4 +11,8 @@ impl<'a> Toknenizer<'a> {
             expr: new_expr.chars().peekable(),
         }
     }
+
+    pub fn next() -> Option<Char> {
+        self.expr.next()
+    }
 }
