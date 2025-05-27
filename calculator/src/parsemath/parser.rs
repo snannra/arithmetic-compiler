@@ -27,9 +27,9 @@ impl<'a> Parser<'a> {
     pub fn parse(&mut self) -> Result<Node, ParseError> {
         let ast = self.generate_ast(OperPrec::DefaultZero);
         match ast {
-            OK(ast) => Ok(ast),
+            Ok(ast) => Ok(ast),
             Err(e) => Err(e),
-        };
+        }
     }
 }
 
@@ -48,7 +48,7 @@ impl<'a> Parser<'a> {
     fn check_paren(&mut self, expected: Token) -> Result<(), ParseError> {
         if expected == self.current_token {
             self.get_next_token()?;
-            OK(())
+            Ok(())
         } else {
             Err(ParseError::InvalidOperator(format!(
                 "Expected {:?}, got {:?}",
@@ -140,7 +140,7 @@ impl<'a> Parser<'a> {
 pub enum ParseError {
     UnableToParse(String),
     InvalidOperator(String),
-}  
+}
 
 impl fmt::Display for ParseError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
@@ -151,4 +151,8 @@ impl fmt::Display for ParseError {
     }
 }
 
-// Last Stop
+impl std::convert::From<std::boxed::Box<dyn std::error::Error>> for ParseError {
+    fn from(_evalerr: std::boxed::Box<dyn std::error::Error>) -> Self {
+        return ParseError::UnableToParse("Unable to parse".into());
+    }
+}
