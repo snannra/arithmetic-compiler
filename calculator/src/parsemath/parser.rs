@@ -9,6 +9,8 @@ pub struct Parser<'a> {
     current_token: Token,
 }
 
+// Public Methods
+
 impl<'a> Parser<'a> {
     pub fn new(expr: &'a str) -> Result<Self, ParseError> {
         let mut lexer = Tokenizer::new(expr);
@@ -30,6 +32,8 @@ impl<'a> Parser<'a> {
         };
     }
 }
+
+// Private Methods
 
 impl<'a> Parser<'a> {
     fn get_next_token(&mut self) -> Result<(), ParseError> {
@@ -131,3 +135,20 @@ impl<'a> Parser<'a> {
         }
     }
 }
+
+#[derive(Debug)]
+pub enum ParseError {
+    UnableToParse(String),
+    InvalidOperator(String),
+}  
+
+impl fmt::Display for ParseError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match &self {
+            self::ParseError::UnableToParse(e) => write!(f, "Error in evaluating {}", e),
+            self::ParseError::InvalidOperator(e) => write!(f, "Error in evaluating {}", e),
+        }
+    }
+}
+
+// Last Stop
